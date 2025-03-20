@@ -31,5 +31,5 @@ The compiler is written in Python and consists of:
 ## Usage
 
 ```python
-python teenytiny.py [source_file]
+python teenytiny.py 
 
