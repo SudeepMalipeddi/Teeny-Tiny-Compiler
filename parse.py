@@ -86,13 +86,13 @@ class Parser:
             self.nl()
 
             self.emitter.emitLine("){")
-            self.emitter.indent_level += 1  
+             
 
             while not self.checkToken(TokenType.ENDIF):
                 self.statement()
 
             self.match(TokenType.ENDIF)
-            self.emitter.indent_level -= 1
+            
             self.emitter.emitLine("}")
         
         elif self.checkToken(TokenType.WHILE):
@@ -105,13 +105,13 @@ class Parser:
             self.nl()
 
             self.emitter.emitLine(") {")
-            # self.emitter.indent_level += 1  # Increase indentation
+            
 
             while not self.checkToken(TokenType.ENDWHILE):
                 self.statement()
 
             self.match(TokenType.ENDWHILE)
-            # self.emitter.indent_level -= 1  
+            
             self.emitter.emitLine("}")
             
         

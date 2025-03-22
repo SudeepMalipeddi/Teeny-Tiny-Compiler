@@ -3,13 +3,12 @@ class Emitter:
         self.fullPath = fullPath
         self.header = ""
         self.code = ""
-        self.indent_level = 0
 
     def emit(self, code):
         self.code += code
 
     def emitLine(self, code):
-        self.code += ("    " * self.indent_level) + code + "\n"
+        self.code +=  code + "\n"
     
     def headerLine(self, code):
         self.header += code + '\n'  
