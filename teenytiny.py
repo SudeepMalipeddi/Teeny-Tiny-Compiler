@@ -1,13 +1,9 @@
 from lex import *
+from emit import *
 from parse import *
 import sys
 def main():
-    print("Teenytiny Compiler")
-    # source = "+- */ > >= = !="
-    # source = "+- # This is a comment!\n */"
-    # source = "+- \"This is a string\" # This is a comment!\n */"
-    # source = "+-123 9.8654*/"
-    # source = "IF+-123 foo*THEN/"
+    print("Teeny Tiny Compiler")
 
     if len(sys.argv) != 2:
         sys.stderr.write("Usage: teenytiny.py <source file>\n")
@@ -18,9 +14,11 @@ def main():
 
 
     lexer = Lexer(source)
-    parser = Parser(lexer)
+    emitter = Emitter("out.c")
+    parser = Parser(lexer, emitter)
 
     parser.program()
-    print("Parsing complete.")
+    emitter.writeFile()
+    print("Compiling complete.")
 
 main()
