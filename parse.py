@@ -86,29 +86,32 @@ class Parser:
             self.nl()
 
             self.emitter.emitLine("){")
+            self.emitter.indent_level += 1  
 
             while not self.checkToken(TokenType.ENDIF):
                 self.statement()
 
             self.match(TokenType.ENDIF)
-            
+            self.emitter.indent_level -= 1
             self.emitter.emitLine("}")
         
         elif self.checkToken(TokenType.WHILE):
             
             self.nextToken()
-            self.emitter.emit("while(")
+            self.emitter.emit("while (")
             self.comparision()
 
             self.match(TokenType.REPEAT)
             self.nl()
 
-            self.emitter.emitLine("){")
+            self.emitter.emitLine(") {")
+            # self.emitter.indent_level += 1  # Increase indentation
 
             while not self.checkToken(TokenType.ENDWHILE):
                 self.statement()
 
             self.match(TokenType.ENDWHILE)
+            # self.emitter.indent_level -= 1  
             self.emitter.emitLine("}")
             
         
@@ -135,14 +138,13 @@ class Parser:
 
 
         elif self.checkToken(TokenType.LET):
-            
             self.nextToken()
 
             if self.curToken.text not in self.symbols:
                 self.symbols.add(self.curToken.text)
                 self.emitter.headerLine("float " + self.curToken.text + ";")
 
-            self.emitter.emitLine(self.curToken.text + " = ")
+            self.emitter.emit(self.curToken.text + " = ")
             self.match(TokenType.IDENT)
             self.match(TokenType.EQ)
 
@@ -172,7 +174,6 @@ class Parser:
         self.nl()
 
     def nl(self):
-        print("NEWLINE")
 
         self.match(TokenType.NEWLINE)
 
@@ -187,7 +188,7 @@ class Parser:
         self.term()
 
         while self.checkToken(TokenType.PLUS) or self.checkToken(TokenType.MINUS):
-            self.emitter.emit(self.curToken.text)
+            self.emitter.emit(" " + self.curToken.text + " ")
             self.nextToken()
             self.term()
     
@@ -200,7 +201,6 @@ class Parser:
             self.unary()
     
     def unary(self):
-        print("UNARY")
 
         if self.checkToken(TokenType.PLUS) or self.checkToken(TokenType.MINUS):
             self.emitter.emit(self.curToken.text)
@@ -231,7 +231,7 @@ class Parser:
         self.expression()
 
         if self.isComparisonOperator():
-            self.emitter.emit(self.curToken.text)
+            self.emitter.emit(" " + self.curToken.text + " ")
             self.nextToken()
             self.expression()
         else:
@@ -241,4 +241,3 @@ class Parser:
             self.emitter.emit(self.curToken.text)
             self.nextToken()
             self.expression()
-    
